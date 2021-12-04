@@ -3,14 +3,23 @@ public class StudentOrderValidator {
         checkAll();
     }
     static void checkAll() {
-        StudentOrder so = readStudentOrder();
+        while (true) {
+            StudentOrder so = readStudentOrder(); // Получение студенческой заявки
+            if (so == null) {
+                break; // return выйдет из метода checkAll(), даже несмотря на бесконечный цикл, break выйдет только из цикла, метод продолжит выполнятся, цикл нет.
+            } else {
+                AnswerCityRegister cityAnswer = checkCityRegister(so);
+                if (!cityAnswer.success) {
+                    break;
+                    //continue; // Если этот оператор выполняется, то он просто начнет цикл заново.
+                }
+                AnswerChildren childAnswer = checkChildren(so);
+                AnswerWedding wedAnswer = checkWedding(so);
+                AnswerStudent studAnswer = checkStudent(so);
 
-        AnswerCityRegister cityAnswer = checkCityRegister(so);
-        AnswerChildren childAnswer = checkChildren(so);
-        AnswerWedding wedAnswer = checkWedding(so);
-        AnswerStudent studAnswer = checkStudent(so);
-
-        sendMail(so);
+                sendMail(so);
+            }
+        }
     }
 
     static StudentOrder readStudentOrder() {
@@ -20,28 +29,35 @@ public class StudentOrderValidator {
 
 
     static AnswerCityRegister checkCityRegister(StudentOrder so) {
-        System.out.println("CityRegister is running");
-        AnswerCityRegister ans = new AnswerCityRegister();
-        return ans;
+        CityRegisterValidator crv1 = new CityRegisterValidator();
+        crv1.hostName = "Host1";
+        crv1.login = "Login1";
+        crv1.password = "Password1";
+        CityRegisterValidator crv2 = new CityRegisterValidator();
+        crv2.hostName = "Host2";
+        crv2.login = "Login2";
+        crv2.password = "Password2";
+        AnswerCityRegister ans1 = crv1.checkCityRegister(so);
+        AnswerCityRegister ans2 = crv2.checkCityRegister(so);
+        return ans1;
     }
 
     static AnswerWedding checkWedding(StudentOrder so) {
-        System.out.println("Wedding is running");
-        return new AnswerWedding();
+        WeddingValidator wd = new WeddingValidator();
+        return wd.checkWedding(so);
     }
 
     static AnswerChildren checkChildren(StudentOrder so) {
-        System.out.println("Children check is running");
-        return new AnswerChildren();
+        ChildrenValidator cv = new ChildrenValidator();
+        return cv.checkChildren(so);
     }
 
     static AnswerStudent checkStudent(StudentOrder so) {
-        System.out.println("Students is running");
-        return new AnswerStudent();
+        return new StudentValidator().checkStudent(so);
     }
 
     static void sendMail(StudentOrder so){
-
+        new MailSender().sendMail(so);
     }
 
 }
