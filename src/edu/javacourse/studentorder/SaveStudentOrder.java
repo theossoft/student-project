@@ -1,5 +1,6 @@
 package edu.javacourse.studentorder;
 
+import edu.javacourse.studentorder.domain.Adult;
 import edu.javacourse.studentorder.domain.StudentOrder;
 
 public class SaveStudentOrder {
@@ -14,5 +15,13 @@ public class SaveStudentOrder {
         long answer = 199;
         System.out.println("saveStudentOrder");
         return answer;
+    }
+
+    static StudentOrder buildStudentOrder() {
+        StudentOrder so = new StudentOrder();
+        Adult husband = new Adult();
+        husband.setGivenName("Андрей");
+        so.setHusband(husband);
+        return so;
     }
 }
