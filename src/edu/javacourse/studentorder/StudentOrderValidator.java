@@ -29,28 +29,27 @@ public class StudentOrderValidator {
     }
 
     public void checkAll() {
-        while (true) {
-            StudentOrder so = readStudentOrder(); // Получение студенческой заявки
-            if (so == null) {
-                break; // return выйдет из метода checkAll(), даже несмотря на бесконечный цикл, break выйдет только из цикла, метод продолжит выполнятся, цикл нет.
-            } else {
-                AnswerCityRegister cityAnswer = checkCityRegister(so);
-                if (!cityAnswer.success) {
-                    break;
-                    //continue; // Если этот оператор выполняется, то он просто начнет цикл заново.
-                }
-                AnswerChildren childAnswer = checkChildren(so);
-                AnswerWedding wedAnswer = checkWedding(so);
-                AnswerStudent studAnswer = checkStudent(so);
-
-                sendMail(so);
-            }
+            StudentOrder[] soArray = readStudentOrders(); // Получение студенческой заявки
+        for (int i = 0; i <soArray.length; i++) {
+            System.out.println();
+            checkOneOrder(soArray[i]);
         }
     }
 
-    public StudentOrder readStudentOrder() {
-        StudentOrder so = new StudentOrder();
-        return so;
+    public void checkOneOrder(StudentOrder so) {
+        AnswerCityRegister cityAnswer = checkCityRegister(so);
+        AnswerChildren childAnswer = checkChildren(so);
+        AnswerWedding wedAnswer = checkWedding(so);
+        AnswerStudent studAnswer = checkStudent(so);
+        sendMail(so);
+    }
+
+    public StudentOrder[] readStudentOrders() {
+        StudentOrder[] soArray = new StudentOrder[3];
+        for (int i = 0; i < soArray.length; i++) {
+            soArray[i] = SaveStudentOrder.buildStudentOrder(i);
+        }
+        return soArray;
     }
 
 
